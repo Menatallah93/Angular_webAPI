@@ -7,17 +7,24 @@ import { AppComponent } from './app.component';
 import { HomeLinkedinComponent } from './home-linkedin/home-linkedin.component';
 import { LoginComponent } from './login/login.component';
 import { RegestrationComponent } from './regestration/regestration.component';
+import { HeaderComponent } from './header/header.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RedirectRegestrationComponent } from './redirect-regestration/redirect-regestration.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeLinkedinComponent,
     LoginComponent,
-    RegestrationComponent
+    RegestrationComponent,
+    HeaderComponent,
+    RedirectRegestrationComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -23,11 +23,11 @@
 <body>
 
   <main>
-    <div class="container">
+    <div class="w-100">
 
-      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-          <div class="row justify-content-center">
+      <section class="section register min-vh-100  d-flex flex-column align-items-center justify-content-center py-4">
+        <div>
+          <div class="row justify-content-center ">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
@@ -46,56 +46,107 @@
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                <form [formGroup]="RegisterationForm" (ngSubmit)="submitData()" class="row g-3">
+                  
+                  <div class="row g-3">
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                      <label for="UserName" class="form-label">UserName</label>
+                      <input  [class.is-invalid]="UserName?.invalid &&UserName?.touched" type="text" name="UserName" formControlName="UserName" class="form-control" id="UserName">
+                      <div  *ngIf="UserName?.errors&&UserName?.touched">
+                        <small *ngIf="UserName?.errors?.['required']">UserName is required</small>
+                        <small *ngIf="UserName?.errors?.['pattern']">UserName must be only Characters</small>
+                        <small *ngIf="UserName?.errors?.['minlength']"> your name must contain mor than 3 Characters</small>                      
+                      </div>
+                  </div>
+                </div>
+                   
+                    <div class="col-md-12 d-flex  justify-content-between">
+                      <div class="col-md-6">
+                        <label for="FirstName" class="form-label">FirstName</label>
+                        <input [class.is-invalid]="FirstName?.invalid &&FirstName?.touched" type="text" name="FirstName" formControlName="FirstName" class="form-control" id="FirstName" >
+                        <div  *ngIf="FirstName?.errors&&FirstName?.touched">
+                          <small *ngIf="FirstName?.errors?.['required']">FirstName is required</small>
+                          <small *ngIf="FirstName?.errors?.['pattern']">FirstName must be only Characters</small>
+                          <small *ngIf="FirstName?.errors?.['minlength']">your name must contain mor than 3 Characters</small>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                      <label for="LastName" class="form-label">LastName</label>
+                      <input [class.is-invalid]="LastName?.invalid &&LastName?.touched" type="text" name="LastName" class="form-control" formControlName="LastName" id="LastName">
+                      <div  *ngIf="LastName?.errors&&LastName?.touched">
+                        <small *ngIf="LastName?.errors?.['required']">LastName is required</small>
+                        <small *ngIf="LastName?.errors?.['pattern']">LastName must be only Characters</small>
+                        <small *ngIf="LastName?.errors?.['minlength']">your name must contain mor than 3 Characters</small>
+                      </div>
+                      </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
+                      <input [class.is-invalid]="yourEmail?.invalid &&yourEmail?.touched"  type="email" name="yourEmail" formControlName="yourEmail" class="form-control" id="yourEmail">
+                      <div  *ngIf="yourEmail?.errors&&yourEmail?.touched">
+                        <small *ngIf="yourEmail?.errors?.['required']">yourEmail is required</small>
+                        <small *ngIf="yourEmail?.errors?.['pattern']">yourEmail must in this form 'abcde@abc.com'</small> 
                       </div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
+                      <input [class.is-invalid]="yourPassword?.invalid &&yourPassword?.touched" type="password" name="password" formControlName="yourPassword" class="form-control" id="yourPassword">
+                      <div  *ngIf="yourPassword?.errors&&yourPassword?.touched">
+                        <small *ngIf="yourPassword?.errors?.['required']">yourPassword is required</small>
+                        <small *ngIf="yourPassword?.errors?.['pattern']">yourPassword must be only Characters</small>
+                        <small *ngIf="yourPassword?.errors?.['minlength']"> your name must contain mor than 6 Characters</small>                      
+
+                      </div>
                     </div>
 
                     <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
+                      <label for="ConfirmPassword" class="form-label">ConfirmPassword</label>
+                      <input [class.is-invalid]="ConfirmPassword?.invalid &&ConfirmPassword?.touched" type="password" formControlName="ConfirmPassword" name="password" class="form-control" id="ConfirmPassword">
+                      <div *ngIf="ConfirmPassword?.errors&&ConfirmPassword?.touched">
+                        <small *ngIf="ConfirmPassword?.errors?.['required']">Confirm Password is required</small>
+                        <small *ngIf="ConfirmPassword?.errors?.['minlength']"> your name must contain mor than 6 Characters</small>                      
+
+                      </div>
+                      <small *ngIf="RegisterationForm?.errors?.['mismatch']">Password and confirm password not match</small>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="Address" class="form-label">Address</label><br>
+                      <input [class.is-invalid]="Address?.invalid &&Address?.touched" class="form-control" type="text" formControlName="Address" id="Address">
+                      <div  *ngIf="Address?.errors&&Address?.touched">
+                        <small *ngIf="Address?.errors?.['required']">Address is required</small>
+                        <small *ngIf="Address?.errors?.['pattern']">Address must be only Characters</small>
                       </div>
                     </div>
+
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                      <label for="Image" class="form-label">Image</label><br>
+                      <input class="form-control" formControlName="Image" type="file" id="formFile">
                     </div>
+                   
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                      <div class="form-check">
+                        <input class="form-check-input" formControlName="termCheck" name="terms" type="checkbox" value="" id="acceptTerms">
+                        <label [class.is-invalid]="termCheck?.invalid &&termCheck?.touched"  class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                        <div  *ngIf="termCheck?.errors&&termCheck?.touched">
+                          <small *ngIf="termCheck?.errors?.['required']">Address is required</small>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" [disabled]="RegisterationForm.invalid"  type="submit"><a class="text-white"  routerLink="/login">Create Account</a></button>
                     </div>
                   </form>
 
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a routerLink="/login">Log in</a></p>
+                    </div>
                 </div>
               </div>
-
-              <div class="credits">
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-              </div>
-
             </div>
           </div>
         </div>

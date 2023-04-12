@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-linkedin.component.scss']
 })
 export class HomeLinkedinComponent {
+  IsShowen :boolean = false;
 
+  showComment(): void {
+    this.IsShowen = !this.IsShowen;
+  }
 }
