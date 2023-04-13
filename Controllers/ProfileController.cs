@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApi_Angular_Proj.DTO;
 using WebApi_Angular_Proj.Models;
 using WebApplication1.Models;
 
@@ -11,6 +12,7 @@ namespace WebApi_Angular_Proj.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public Context Context { get; }
@@ -19,6 +21,7 @@ namespace WebApi_Angular_Proj.Controllers
             Context = context;
             this.userManager = userManager;
         }
+
         [HttpGet("MyProfile")]
         public async Task<IActionResult> MyProfileAsync()
         {
@@ -31,15 +34,53 @@ namespace WebApi_Angular_Proj.Controllers
             return BadRequest();
         }
 
+        [HttpPut("Password")]
+        public async Task<IActionResult> PasswordAsync(string id,string oldpass,string newpass)
+        {
+            User user = Context.Users.FirstOrDefault(u=> u.Id==id);
+
+            ApplicationUser Usr = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                if(await userManager.CheckPasswordAsync(Usr, oldpass))
+                {
+                    Usr.PasswordHash = newpass;
+
+                }
+                else
+                {
+                    return Content("Old Password isn't correct");
+                }
+
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+
+        [HttpPut("Data")]
+        public async Task<IActionResult> DataAsync(string id, User newuser)
+        {
+            User user = Context.Users.FirstOrDefault(u => u.Id == id);
+
+            ApplicationUser Usr = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                //mapping between user and newuser
+
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+
         [HttpGet("MyPosts")]
         public IActionResult GetPosts(string id)
         {
-            List<Post> posts = Context.Posts.Where(p => p.ApplicationUserId == id).ToList();
+            List<Post> posts = Context.Posts.Where(p => p.UserId == id).ToList();
             return Ok(posts);
         }
 
         [HttpGet("RequetsSent")]
-        public IActionResult RequetsSent(string id)
+        public IActionResult RequestsSent(string id)
         {
             
             List<Requests> toRq = Context.Requests.Where(r => r.FromId == id).ToList();

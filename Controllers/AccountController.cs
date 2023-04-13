@@ -49,7 +49,9 @@ namespace WebApi_Angular_Proj.Controllers
                     usr.LName = registerDTO.LName;
                     usr.FName = registerDTO.FName;
                     usr.Image = registerDTO.Image.FileName;
+
                     Context.Users.Add(usr);
+
                     Context.SaveChanges();
 
                     return Ok("Done");
