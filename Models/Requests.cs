@@ -11,9 +11,9 @@ namespace WebApi_Angular_Proj.Models
         public DateTime Date { get; set; }
 
         [ForeignKey("FromUser")]
-        public int FromId { get; set; }
+        public string FromId { get; set; }
         [ForeignKey("ToUser")]
-        public int ToId { get; set; }
+        public string ToId { get; set; }
 
         public virtual User FromUser { get; set; }
         public virtual User ToUser { get; set; }
