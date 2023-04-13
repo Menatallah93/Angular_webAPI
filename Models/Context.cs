@@ -1,0 +1,23 @@
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using WebApplication1.Models;
+
+namespace WebApi_Angular_Proj.Models
+{
+    public class Context:IdentityDbContext<ApplicationUser>
+    {
+        public Context()
+        {
+
+        }
+        public Context(DbContextOptions options) : base(options)
+        {
+
+        }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<User> Users { get; set; }
+
+    }
+}
