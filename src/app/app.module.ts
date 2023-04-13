@@ -9,7 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { RegestrationComponent } from './regestration/regestration.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RedirectRegestrationComponent } from './redirect-regestration/redirect-regestration.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -19,7 +19,7 @@ import { RedirectRegestrationComponent } from './redirect-regestration/redirect-
     LoginComponent,
     RegestrationComponent,
     HeaderComponent,
-    RedirectRegestrationComponent
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
