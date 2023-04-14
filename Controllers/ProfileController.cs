@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApi_Angular_Proj.DTO;
 using WebApi_Angular_Proj.Models;
 using WebApplication1.Models;
@@ -25,7 +26,8 @@ namespace WebApi_Angular_Proj.Controllers
         [HttpGet("MyProfile")]
         public async Task<IActionResult> MyProfileAsync()
         {
-            ApplicationUser usr = await userManager.GetUserAsync(User);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ApplicationUser usr = await userManager.FindByIdAsync(userId);
             if (usr != null)
             {
                 User user = Context.Users.FirstOrDefault(u => u.Id == usr.Id);
@@ -44,11 +46,17 @@ namespace WebApi_Angular_Proj.Controllers
             {
                 if(await userManager.CheckPasswordAsync(Usr, oldpass))
                 {
-                    Usr.PasswordHash = newpass;
+                    var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr,newpass);
+                    
+                    
+                    Usr.PasswordHash = newPasswordHash;
+
+                    Context.SaveChanges();
 
                 }
                 else
                 {
+                    //RedirectToActionResult("GetAll", "ControllerName", null)
                     return Content("Old Password isn't correct");
                 }
 
@@ -66,6 +74,21 @@ namespace WebApi_Angular_Proj.Controllers
             if (user != null)
             {
                 //mapping between user and newuser
+                user.About = newuser.About;
+                user.Address = newuser.Address;
+                user.FacebookLink = newuser.FacebookLink;
+                user.LinkedinLink = newuser.LinkedinLink;
+                user.InstagramLink = newuser.InstagramLink;
+                user.Company = newuser.Company;
+                user.Cuntry = newuser.Cuntry;
+                user.FName = newuser.FName;
+                user.FullName = $"{newuser.FName} {newuser.LName}";
+                user.Image = newuser.Image;
+                user.LName = newuser.LName;
+                user.Phone = newuser.Phone;
+                user.TwitterLink = newuser.TwitterLink;
+
+                Context.SaveChanges();
 
                 return Ok("Done");
             }

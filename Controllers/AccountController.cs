@@ -48,7 +48,7 @@ namespace WebApi_Angular_Proj.Controllers
                     usr.Address = registerDTO.Address;
                     usr.LName = registerDTO.LName;
                     usr.FName = registerDTO.FName;
-                    usr.Image = registerDTO.Image.FileName;
+                    usr.Image = registerDTO.Image;
 
                     Context.Users.Add(usr);
 
