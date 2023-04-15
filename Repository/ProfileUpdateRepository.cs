@@ -22,6 +22,8 @@ namespace WebApi_Angular_Proj.Repository
             User user = GetById(id);
 
             user.FullName = profileUpdateDTO.FullName;
+            user.FName = profileUpdateDTO.FName;
+            user.LName = profileUpdateDTO.LName;
             user.About = profileUpdateDTO.About;
             user.Company = profileUpdateDTO.Company;
             user.job = profileUpdateDTO.job;

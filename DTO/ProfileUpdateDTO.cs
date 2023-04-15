@@ -3,8 +3,11 @@
     //viwe Model
     public class ProfileUpdateDTO
     { 
-        public string ID { get; set; }
+       
+        public string userId { get; set; }
         public string FullName { get; set; }
+        public string FName { get; set; }
+        public string LName { get; set; }
         public string About { get; set; }
         public string Company { get; set; }
         public string job { get; set; }

@@ -36,19 +36,52 @@ namespace WebApi_Angular_Proj.Controllers
             return BadRequest();
         }
 
-        [HttpPut("Password")]
-        public async Task<IActionResult> PasswordAsync(string id,string oldpass,string newpass)
+        [HttpGet("MyData/{id}")]
+        public async Task<ActionResult<ProfileUpdateDTO>> GetDataAsync(string id)
         {
             User user = Context.Users.FirstOrDefault(u=> u.Id==id);
+            ProfileUpdateDTO usrDto = new ProfileUpdateDTO();
+            if (user != null)
+            {
+                usrDto.About = user.About;
+                usrDto.userId = user.Id;
+                usrDto.job = user.job;
+                usrDto.Address = user.Address;
+                usrDto.Company = user.Company;
+                usrDto.Cuntry = user.Cuntry;
+                usrDto.FName = user.FName;
+                usrDto.TwitterLink = user.TwitterLink;
+                usrDto.Phone = user.Phone;
+                usrDto.FacebookLink = user.FacebookLink;
+                usrDto.Image = user.Image;
+                usrDto.LinkedinLink = user.LinkedinLink;
+                usrDto.LName = user.LName;
+                usrDto.FullName = user.FullName;
+                
+
+
+                return Ok(usrDto);
+
+            }
+            return BadRequest();
+
+            }
+            
+        
+
+        [HttpPut("Password")]
+        public async Task<IActionResult> PasswordAsync(string id, string oldpass, string newpass)
+        {
+            User user = Context.Users.FirstOrDefault(u => u.Id == id);
 
             ApplicationUser Usr = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                if(await userManager.CheckPasswordAsync(Usr, oldpass))
+                if (await userManager.CheckPasswordAsync(Usr, oldpass))
                 {
-                    var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr,newpass);
-                    
-                    
+                    var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr, newpass);
+
+
                     Usr.PasswordHash = newPasswordHash;
 
                     Context.SaveChanges();
@@ -64,9 +97,8 @@ namespace WebApi_Angular_Proj.Controllers
             }
             return BadRequest();
         }
-
-        [HttpPut("Data")]
-        public async Task<IActionResult> DataAsync(string id, User newuser)
+        [HttpPut("Data/{id}")]
+        public async Task<IActionResult> DataAsync(string id, ProfileUpdateDTO newuser)
         {
             User user = Context.Users.FirstOrDefault(u => u.Id == id);
 
@@ -82,9 +114,9 @@ namespace WebApi_Angular_Proj.Controllers
                 user.Company = newuser.Company;
                 user.Cuntry = newuser.Cuntry;
                 user.FName = newuser.FName;
+                user.LName = newuser.LName;
                 user.FullName = $"{newuser.FName} {newuser.LName}";
                 user.Image = newuser.Image;
-                user.LName = newuser.LName;
                 user.Phone = newuser.Phone;
                 user.TwitterLink = newuser.TwitterLink;
 

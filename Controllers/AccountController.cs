@@ -49,7 +49,7 @@ namespace WebApi_Angular_Proj.Controllers
                     usr.LName = registerDTO.LName;
                     usr.FName = registerDTO.FName;
                     usr.Image = registerDTO.Image;
-
+                    usr.FullName = $"{registerDTO.FName} {registerDTO.LName}";
                     Context.Users.Add(usr);
 
                     Context.SaveChanges();
@@ -100,8 +100,9 @@ namespace WebApi_Angular_Proj.Controllers
                     return Ok(new
                     {
                         token = new JwtSecurityTokenHandler().WriteToken(jtw),
-                        expiration = jtw.ValidTo
-                    });
+                        expiration = jtw.ValidTo,
+                       
+                });
 
                 }
                 return BadRequest("Invalid Data");
