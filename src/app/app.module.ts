@@ -10,6 +10,8 @@ import { RegestrationComponent } from './regestration/regestration.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -24,6 +26,7 @@ import { ProfileComponent } from './profile/profile.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     ReactiveFormsModule,
   ],
   providers: [],
