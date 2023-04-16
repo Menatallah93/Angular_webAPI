@@ -13,8 +13,7 @@ export class ProfileComponent {
   }
 
   ProfileData : IProfile = {
-    id: 0,
-    userid: '',
+    userId: '',
     fullName: '',
     fName: '',
     lName: '',
@@ -24,12 +23,12 @@ export class ProfileComponent {
     cuntry: '',
     address: '',
     phone: '',
-    email: '',
     twitterLink: '',
     facebookLink: '',
     instagramLink: '',
     linkedinLink: '',
-    image: ''
+    image: '',
+    
   }
   Error: any;
 
@@ -60,13 +59,25 @@ export class ProfileComponent {
       
       error: err => this.Error = err,
     })
+    console.log(this.ProfileData);
   }
   
   SaveChanges() {
-    console.log(this.UpdatePofileForm.value);
-    this.ProfileService.UpdateData("aaa54065-545e-45a2-99cc-be364a8b0562",this.UpdatePofileForm.value)
-    
-    
+    console.log(this.ProfileData);
+    this.ProfileService.UpdateData("aaa54065-545e-45a2-99cc-be364a8b0562",this.ProfileData).subscribe({
+      next: data => this.ProfileData = data,
+      
+      error: err => console.log(err),
+    })
+  }
+
+  PassChanges() {
+    console.log(this.ProfileData);
+    this.ProfileService.UpdateData("aaa54065-545e-45a2-99cc-be364a8b0562",this.ProfileData).subscribe({
+      next: data => this.ProfileData = data,
+      
+      error: err => console.log(err),
+    })
   }
   get fullName(){
     return this.UpdatePofileForm.get('fullName');

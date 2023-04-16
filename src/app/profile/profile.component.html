@@ -47,13 +47,13 @@
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
               <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2>Kevin Anderson</h2>
-              <h3>Web Designer</h3>
+              <h2>{{ProfileData.fullName}}</h2>
+              <h3>{{ProfileData.job}}</h3>
               <div class="social-links mt-2">
-                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                <a [href]="ProfileData.twitterLink" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a [href]="ProfileData.facebookLink" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a [href]="ProfileData.instagramLink" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a [href]="ProfileData.linkedinLink" class="linkedin"><i class="bi bi-linkedin"></i></a>
               </div>
             </div>
           </div>
@@ -88,52 +88,49 @@
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   <h5 class="card-title">About</h5>
-                  <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+                  <p class="small fst-italic">{{ProfileData.about}}</p>
 
                   <h5 class="card-title">Profile Details</h5>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Full Name</div>
                     
-                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.fullName}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Company</div>
-                    <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.company}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Job</div>
-                    <div class="col-lg-9 col-md-8">Web Designer</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.job}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Country</div>
-                    <div class="col-lg-9 col-md-8">USA</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.cuntry}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Address</div>
-                    <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.address}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Phone</div>
-                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                    <div class="col-lg-9 col-md-8">{{ProfileData.phone}}</div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
-                  </div>
+                  
 
                 </div>
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                   <!-- Profile Edit Form -->
-                  <form [formGroup]="UpdatePofileForm">
+                  <form [formGroup]="UpdatePofileForm" (ngSubmit)="SaveChanges()">
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                       <div class="col-md-8 col-lg-9">
@@ -148,96 +145,91 @@
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="fullName" formControlName="fName" [class.is-invalid]="fName?.invalid &&fName?.touched" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                        <input name="fullName" formControlName="fName" [(ngModel)]="ProfileData.fName" [class.is-invalid]="fName?.invalid &&fName?.touched" type="text" class="form-control" id="fullName" value="Kevin Anderson">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="fullName"  class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="lName" [value]="ProfileData.lName" [class.is-invalid]="lName?.invalid &&lName?.touched" type="text" name="UserName" name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                        <input formControlName="lName" [(ngModel)]="ProfileData.lName" [class.is-invalid]="lName?.invalid &&lName?.touched" type="text" name="UserName" name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
                       <div class="col-md-8 col-lg-9">
-                        <textarea formControlName="about"  name="about" [class.is-invalid]="about?.invalid &&about?.touched" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                        <textarea formControlName="about" [(ngModel)]="ProfileData.about"  name="about" [class.is-invalid]="about?.invalid &&about?.touched" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="company" name="company" [class.is-invalid]="company?.invalid &&company?.touched" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
+                        <input formControlName="company" [(ngModel)]="ProfileData.company" name="company" [class.is-invalid]="company?.invalid &&company?.touched" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="job" name="job" [class.is-invalid]="job?.invalid &&job?.touched" type="text" class="form-control" id="Job" value="Web Designer">
+                        <input formControlName="job" [(ngModel)]="ProfileData.job" name="job" [class.is-invalid]="job?.invalid &&job?.touched" type="text" class="form-control" id="Job" value="Web Designer">
                       </div>
                     </div>
 
                     <div class="row mb-3">
-                      <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                      <label for="Country"  class="col-md-4 col-lg-3 col-form-label">Country</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="cuntry" name="cuntry" [class.is-invalid]="cuntry?.invalid &&cuntry?.touched" type="text" class="form-control" id="Country" value="USA">
+                        <input formControlName="cuntry" [(ngModel)]="ProfileData.cuntry" name="cuntry" [class.is-invalid]="cuntry?.invalid &&cuntry?.touched" type="text" class="form-control" id="Country" value="USA">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="address" name="address" [class.is-invalid]="address?.invalid &&address?.touched" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
+                        <input formControlName="address" [(ngModel)]="ProfileData.address" name="address" [class.is-invalid]="address?.invalid &&address?.touched" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="phone" name="phone" [class.is-invalid]="phone?.invalid &&phone?.touched" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
+                        <input formControlName="phone" [(ngModel)]="ProfileData.phone" name="phone" [class.is-invalid]="phone?.invalid &&phone?.touched" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
                       </div>
                     </div>
 
-                    <div class="row mb-3">
-                      <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input formControlName="email" name="email" [class.is-invalid]="email?.invalid &&email?.touched" type="email" class="form-control" id="Email" value="k.anderson@example.com">
-                      </div>
-                    </div>
+                    
 
                     <div class="row mb-3">
                       <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="twitterLink" name="twitterLink" [class.is-invalid]="twitterLink?.invalid &&twitterLink?.touched" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+                        <input formControlName="twitterLink" [(ngModel)]="ProfileData.twitterLink" name="twitterLink" [class.is-invalid]="twitterLink?.invalid &&twitterLink?.touched" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="facebookLink" name="facebookLink" [class.is-invalid]="facebookLink?.invalid &&facebookLink?.touched" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+                        <input formControlName="facebookLink" [(ngModel)]="ProfileData.facebookLink" name="facebookLink" [class.is-invalid]="facebookLink?.invalid &&facebookLink?.touched" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="instagramLink" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="instagramLink" name="instagramLink" [class.is-invalid]="instagramLink?.invalid &&instagramLink?.touched" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+                        <input formControlName="instagramLink" [(ngModel)]="ProfileData.instagramLink" name="instagramLink" [class.is-invalid]="instagramLink?.invalid &&instagramLink?.touched" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
                       <div class="col-md-8 col-lg-9">
-                        <input formControlName="linkedinLink" [value]="linkedinLink" name="linkedinLink" [class.is-invalid]="linkedinLink?.invalid &&linkedinLink?.touched" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+                        <input formControlName="linkedinLink" [(ngModel)]="ProfileData.linkedinLink" [value]="linkedinLink" name="linkedinLink" [class.is-invalid]="linkedinLink?.invalid &&linkedinLink?.touched" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
                       </div>
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary"  (click)="SaveChanges()">Save Changes</button>
+                      <button type="submit" class="btn btn-primary" >Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
@@ -279,7 +271,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary" (click)="SaveChanges()">Save Changes</button>
+                      <input class="btn btn-primary" type="submit" (click)="SaveChanges()" value="Save Changes" />
                     </div>
                   </form><!-- End Post Form -->
 
