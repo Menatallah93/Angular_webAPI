@@ -73,17 +73,17 @@ namespace WebApi_Angular_Proj.Controllers
             
         
 
-        [HttpPut("Password/{id}/{oldpass}")]
-        public async Task<IActionResult> PasswordAsync(string id, string oldpass, string newpass)
+        [HttpPut("Password/{id}")]
+        public async Task<IActionResult> PasswordAsync(string id , ChangePassDto chpass)
         {
             User user = Context.Users.FirstOrDefault(u => u.Id == id);
 
             ApplicationUser Usr = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                if (await userManager.CheckPasswordAsync(Usr, oldpass))
+                if (await userManager.CheckPasswordAsync(Usr, chpass.oldPass))
                 {
-                    var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr, newpass);
+                    var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr, chpass.newPass);
 
 
                     Usr.PasswordHash = newPasswordHash;
