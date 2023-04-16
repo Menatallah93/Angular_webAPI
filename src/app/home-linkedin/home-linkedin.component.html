@@ -172,7 +172,7 @@
                   <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
+                <form [formGroup]="CreatePostForm" (ngSubmit)="CreatePost()">
 
                   <div class="modal-body">
                     <div class="m-1">
@@ -186,8 +186,8 @@
                     </div>
                     <div>
                       <div class="form-floating">
-                        <textarea class="form-control" placeholder="Write A Post"
-                          style="color: black;font-size: large; height: 200px"></textarea>
+                        <textarea class="form-control" formControlName="postContent" [(ngModel)]="Post.postContent"
+                          placeholder="Write A Post" style="color: black;font-size: large; height: 200px"></textarea>
                       </div>
                     </div>
                     <div class="d-flex mt-3">
@@ -202,11 +202,11 @@
 
                     </div>
                   </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancle</button>
+                    <button type="submit" class="btn btn-primary">Share</button>
+                  </div>
                 </form>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancle</button>
-                  <button type="button" class="btn btn-primary">Share</button>
-                </div>
               </div>
             </div>
 
@@ -220,8 +220,8 @@
             <div class="card recent-sales overflow-auto">
 
 
-<!--Posts-->
-              <div *ngFor="let Post of Posts" class="card-body">
+              <!--Posts-->
+              <div *ngFor="let Post of Posts; let i = index" class="card-body">
 
                 <div class="d-flex m-3">
 
@@ -232,10 +232,10 @@
                   </div>
                   <div class="m-3">
                     <h4 style="font-weight: bold;">
-                      {{Post.user.fName}} 
+                      {{Post.user.fName}}
                     </h4>
                     <p>
-                      {{Post.user.image}} 
+                      {{Post.user.image}}
                     </p>
                   </div>
 
@@ -254,7 +254,11 @@
                   <a type="button" class="btn btn-outline-primary btn-md"><i class="fa-sharp fa-share"></i> Share</a>
                 </div>
 
-                <div id="Comments" *ngIf="IsShowen">
+
+
+
+
+                <div id="comments" *ngIf="IsShowen">
                   <div class="d-flex m-3">
 
                     <div class="m-1">
@@ -263,8 +267,16 @@
                         height="70px">
                     </div>
                     <div class="m-3">
-                      <input type="text" class="rounded-4 " style="width:40vw;height:6vh;" placeholder="Add A Comment"
-                        name="query" />
+                      <form [formGroup]="CreateComment" (ngSubmit)="CreateCommentFunc(Post.id)">
+
+                        <input type="text" formControlName="commentContent" [(ngModel)]="Comment.commentContent"
+                          class="rounded-4 " style="width:40vw;height:6vh;" placeholder="Add A Comment" name="query" />
+
+                        <input type="hidden" formControlName="postId" name="postId" [(ngModel)]="Comment.postId"
+                          [value]="Post.id">
+
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                      </form>
 
                     </div>
 
@@ -278,13 +290,14 @@
                         height="70px">
                     </div>
 
-                    <div  class="m-3 lh-2">
+                    <div class="m-3 lh-2">
                       <span style="font-size: 18px; font-weight: bold;">{{Comment.user.fName}}</span>
                       <br>
                       .Net Developer
                       <br>
                       <br>
                       <p>{{Comment.content}}</p>
+
                     </div>
 
                   </div>

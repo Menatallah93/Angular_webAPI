@@ -9,4 +9,10 @@ export interface IComment {
     content: string,
     updated: boolean,
     user: IUser
-} 
+}
+
+export interface ICreateComment {
+    postId: number,
+    userId: string
+    commentContent: string
+}
