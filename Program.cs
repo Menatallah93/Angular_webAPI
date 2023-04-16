@@ -16,7 +16,7 @@ namespace WebApi_Angular_Proj
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddCors(options => {
-                options.AddPolicy("MyPolicy", builder =>
+                options.AddPolicy("My", builder =>
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                 );
 
@@ -101,7 +101,7 @@ namespace WebApi_Angular_Proj
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("MyPolicy");
+            app.UseCors("My");
             app.UseAuthentication();
             app.UseAuthorization();
 

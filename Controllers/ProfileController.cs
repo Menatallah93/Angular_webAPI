@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Web.Http.Cors;
 using WebApi_Angular_Proj.DTO;
 using WebApi_Angular_Proj.Models;
 using WebApplication1.Models;
@@ -11,6 +12,7 @@ namespace WebApi_Angular_Proj.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(origins: "http://localhost:4200/", headers: "*", methods: "*")]
     public class ProfileController : ControllerBase
     {
 
@@ -57,7 +59,9 @@ namespace WebApi_Angular_Proj.Controllers
                 usrDto.LinkedinLink = user.LinkedinLink;
                 usrDto.LName = user.LName;
                 usrDto.FullName = user.FullName;
-                
+                usrDto.job = user.job;
+                usrDto.InstagramLink = user.InstagramLink;
+
 
 
                 return Ok(usrDto);
@@ -69,7 +73,7 @@ namespace WebApi_Angular_Proj.Controllers
             
         
 
-        [HttpPut("Password")]
+        [HttpPut("Password/{id}/{oldpass}")]
         public async Task<IActionResult> PasswordAsync(string id, string oldpass, string newpass)
         {
             User user = Context.Users.FirstOrDefault(u => u.Id == id);
@@ -119,6 +123,8 @@ namespace WebApi_Angular_Proj.Controllers
                 user.Image = newuser.Image;
                 user.Phone = newuser.Phone;
                 user.TwitterLink = newuser.TwitterLink;
+                user.job = newuser.job;
+                
 
                 Context.SaveChanges();
 
@@ -126,6 +132,8 @@ namespace WebApi_Angular_Proj.Controllers
             }
             return BadRequest();
         }
+
+
 
         [HttpGet("MyPosts")]
         public IActionResult GetPosts(string id)

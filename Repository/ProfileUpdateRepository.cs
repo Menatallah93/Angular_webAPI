@@ -30,7 +30,7 @@ namespace WebApi_Angular_Proj.Repository
             user.Cuntry = profileUpdateDTO.Cuntry;
             user.Address = profileUpdateDTO.Address;
             user.Phone = profileUpdateDTO.Phone;
-            user.ApplicationUser.Email = profileUpdateDTO.Email;
+            
             user.TwitterLink = profileUpdateDTO.TwitterLink;
             user.FacebookLink = profileUpdateDTO.FacebookLink;
             user.InstagramLink = profileUpdateDTO.InstagramLink;

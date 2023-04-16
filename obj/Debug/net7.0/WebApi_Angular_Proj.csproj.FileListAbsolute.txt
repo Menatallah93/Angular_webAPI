@@ -81,3 +81,9 @@ C:\WebApi&Angular\WebApi_Angular_Proj\obj\Debug\net7.0\refint\WebApi_Angular_Pro
 C:\WebApi&Angular\WebApi_Angular_Proj\obj\Debug\net7.0\WebApi_Angular_Proj.pdb
 C:\WebApi&Angular\WebApi_Angular_Proj\obj\Debug\net7.0\WebApi_Angular_Proj.genruntimeconfig.cache
 C:\WebApi&Angular\WebApi_Angular_Proj\obj\Debug\net7.0\ref\WebApi_Angular_Proj.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\System.Web.Cors.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\System.Net.Http.Formatting.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\System.Web.Http.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\System.Web.Http.Cors.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\WebApi&Angular\WebApi_Angular_Proj\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
