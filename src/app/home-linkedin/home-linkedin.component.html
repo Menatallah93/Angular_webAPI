@@ -141,6 +141,19 @@
                   <span class="float-start">Start A Post</span>
                 </button>
                 <a type="button" class="btn btn-primary btn-md"><i class="fa-regular fa-image"></i> Photo</a>
+
+                <span class="dropdown float-end" style="margin-top: 32px;">
+                  <button class="btn btn-secondary " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span>&#8230;</span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+
+                </span>
               </div>
             </div>
           </div>
@@ -259,8 +272,8 @@
                         <input type="text" formControlName="commentContent" [(ngModel)]="Comment.commentContent"
                           class="rounded-4 " style="width:40vw;height:6vh;" placeholder="Add A Comment" name="query" />
 
-                        <input type="hidden" formControlName="postId" name="postId" [(ngModel)]="Comment.postId"
-                          [value]="Post.id">
+                        <!-- <input type="hidden" formControlName="postId" name="postId" [(ngModel)]="Comment.postId"
+                          [value]="Post.id"> -->
 
                         <button type="submit" class="btn btn-primary">Add Comment</button>
                       </form>

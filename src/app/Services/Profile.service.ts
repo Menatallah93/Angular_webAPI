@@ -21,7 +21,7 @@ export class ProfileservicesService {
 
   GetData(userid: string): Observable<IProfile> {
 
-    return this.http.get<IProfile>(`https://localhost:7223/api/profile/MyData/${userid}`)
+    return this.http.get<IProfile>(`https://localhost:44335/api/profile/MyData/${userid}`)
       .pipe(catchError((err) => {
         return throwError(() => err.message || "server error");
       }));
@@ -29,7 +29,7 @@ export class ProfileservicesService {
 
   ChangePass(id: string, newpass: string, oldpass: string): Observable<object> {
 
-    return this.http.put<object>(`https://localhost:7223/api/profile/password/${id}`, { newpass, oldpass })
+    return this.http.put<object>(`https://localhost:44335/api/profile/password/${id}`, { newpass, oldpass })
       .pipe(catchError((err) => {
         return throwError(() => err.message || "server error");
       }));

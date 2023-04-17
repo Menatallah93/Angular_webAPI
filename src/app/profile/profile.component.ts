@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProfileservicesService } from '../Services/Profile.service';
+import { FrindRequstService } from '../Services/frind-requst.service';
 import { IProfile } from '../Shared-Interface/IProfile';
+import { ISendRequest } from '../Shared-Interface/ISendRequest';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
-  constructor(private fb: FormBuilder, private ProfileService: ProfileservicesService) {
+  constructor(private fb: FormBuilder, private ProfileService: ProfileservicesService,
+    private FrindRequest: FrindRequstService) {
 
   }
 
@@ -51,9 +54,14 @@ export class ProfileComponent {
 
 
   });
+
+  fromId: string = "292c22c6-2574-4cbc-979e-c94a0640eca0"
+  toId: string = "1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea"
+
   oldpass: string = ''
   newpass: string = ''
   confirmpass: string = ''
+
   UpdatePassForm = this.fb.group({
     oldpass: ['',],
     newpass: ['',],
@@ -61,9 +69,18 @@ export class ProfileComponent {
 
   });
 
+  ConnectForm = this.fb.group({
+    fromId: [''],
+    toId: ['']
+
+  });
+
+
+
+
   ngOnInit() {
     console.log(this.ProfileData);
-    this.ProfileService.GetData("aaa54065-545e-45a2-99cc-be364a8b0562").subscribe({
+    this.ProfileService.GetData("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea").subscribe({
       next: data => this.ProfileData = data,
 
       error: err => this.Error = err,
@@ -73,7 +90,7 @@ export class ProfileComponent {
 
   SaveChanges() {
     console.log(this.ProfileData);
-    this.ProfileService.UpdateData("aaa54065-545e-45a2-99cc-be364a8b0562", this.ProfileData).subscribe({
+    this.ProfileService.UpdateData("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea", this.ProfileData).subscribe({
       next: data => this.ProfileData = data,
 
       error: err => console.log(err),
@@ -83,12 +100,22 @@ export class ProfileComponent {
   PassChanges() {
     console.log(this.newpass);
     console.log(this.oldpass);
-    this.ProfileService.ChangePass("aaa54065-545e-45a2-99cc-be364a8b0562", this.newpass, this.oldpass).subscribe({
+    this.ProfileService.ChangePass("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea", this.newpass, this.oldpass).subscribe({
       next: data => console.log(data),
 
       error: err => console.log(err),
     })
   }
+
+  SendConnect() {
+    this.FrindRequest.SenConnect(this.fromId, this.toId).subscribe({
+      next: data => console.log(data),
+      error: err => console.log(err),
+    })
+  }
+
+
+
   get fullName() {
     return this.UpdatePofileForm.get('fullName');
   }
