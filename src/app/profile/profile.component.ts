@@ -6,13 +6,14 @@ import { IProfile } from '../Shared-Interface/IProfile';
 import { ISendRequest } from '../Shared-Interface/ISendRequest';
 import { IChangePass } from '../Shared-Interface/IChangePass';
 import { IPost } from '../Shared-Interface/IPost';
+import { PostServiceService } from '../Services/post-service.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
-  constructor(private fb: FormBuilder, private ProfileService: ProfileservicesService,
+  constructor(private fb: FormBuilder,private _PostService: PostServiceService, private ProfileService: ProfileservicesService,
     private FrindRequest: FrindRequstService) {
 
   }
@@ -112,6 +113,8 @@ export class ProfileComponent {
       
       error: err => console.log(err),
     })}
+
+    
 
     MyPosts() {
       

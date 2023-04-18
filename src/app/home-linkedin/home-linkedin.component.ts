@@ -7,6 +7,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { valueOrDefault } from 'src/assets/vendor/chart.js/helpers';
 import { Ilike } from '../Shared-Interface/ILike';
 import { interval, lastValueFrom, take } from 'rxjs';
+import { Router } from '@angular/router';
+import { IUser } from '../Shared-Interface/IUser';
 
 @Component({
   selector: 'app-home-linkedin',
@@ -14,10 +16,11 @@ import { interval, lastValueFrom, take } from 'rxjs';
   styleUrls: ['./home-linkedin.component.scss'],
 })
 export class HomeLinkedinComponent implements OnInit {
-  constructor(private fb: FormBuilder, private _PostService: PostServiceService, private _CommentService: CommentservicesService) { }
+  constructor(private fb: FormBuilder, private _PostService: PostServiceService, private _CommentService: CommentservicesService,private router:Router,) { }
   Posts: IPost[] = [];
   Comments: IComment[] = [];
   Error: any;
+  CurrentUser!: IUser;
   IsShowen: boolean = false;
 
   CreatePostForm = this.fb.group({
@@ -34,18 +37,18 @@ export class HomeLinkedinComponent implements OnInit {
   })
 
   Post: ICreatePost = {
-    userId: "aaa54065-545e-45a2-99cc-be364a8b0562",
+    userId: "3740f54c-f6b1-4b00-b917-81c79a58b3d9",
     postContent: ""
   }
 
   Comment: ICreateComment = {
-    userId: "aaa54065-545e-45a2-99cc-be364a8b0562",
+    userId: "3740f54c-f6b1-4b00-b917-81c79a58b3d9",
     postId: 0,
     commentContent: ""
   }
 
   like:Ilike = {
-    userId:"aaa54065-545e-45a2-99cc-be364a8b0562",
+    userId:"3740f54c-f6b1-4b00-b917-81c79a58b3d9",
     typeContent:"Post",
     postId:0
   }
@@ -56,8 +59,22 @@ export class HomeLinkedinComponent implements OnInit {
 
       error: err => this.Error = err,
     })
+
+    this._PostService.GetPosts().subscribe({
+      next: data => this.Posts = data,
+
+      error: err => this.Error = err,
+    })
     console.log(this.Posts);
 
+  }
+
+  GetCurrentUsers(){
+    this._PostService.GetCurrentUser("3740f54c-f6b1-4b00-b917-81c79a58b3d9").subscribe({
+      next: data => this.CurrentUser = data,
+      
+      error: err => console.log(err),
+    })
   }
 
   showComment(PostId: number): void {
@@ -75,6 +92,10 @@ export class HomeLinkedinComponent implements OnInit {
       next: data => console.log(data),
       error: err => console.log(err),
     })
+    this.router.navigate(["/Profile"]);
+
+    
+    
   }
 
   CreateCommentFunc(PostId: number) {
@@ -83,6 +104,7 @@ export class HomeLinkedinComponent implements OnInit {
       next: data => console.log(data),
       error: err => console.log(err),
     })
+    
   }
 
 
