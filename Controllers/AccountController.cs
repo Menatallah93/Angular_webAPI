@@ -15,30 +15,32 @@ namespace WebApi_Angular_Proj.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        //api/Account/register
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration config;
 
         public Context Context { get; }
 
-        public AccountController(UserManager<ApplicationUser> userManager, IConfiguration config,Context context) 
+        public AccountController(UserManager<ApplicationUser> userManager, IConfiguration config, Context context)
         {
             this.userManager = userManager;
             this.config = config;
             Context = context;
         }
+
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(RegisterDTO registerDTO)
+        public async Task<ActionResult<Result>> RegisterAsync(RegisterDTO registerDTO)
         {
 
             if (ModelState.IsValid)
             {
-                ApplicationUser newUsr= new ApplicationUser();
+                ApplicationUser newUsr = new ApplicationUser();
 
                 newUsr.Email = registerDTO.Email;
-                newUsr.UserName= registerDTO.UserName;
-                newUsr.PhoneNumber = registerDTO.Phone;
+                newUsr.UserName = registerDTO.UserName;
 
-               IdentityResult result =await userManager.CreateAsync(newUsr,registerDTO.Password);
+                IdentityResult result = await userManager.CreateAsync(newUsr, registerDTO.Password);
+                Result result1 = new Result();
 
                 if (result.Succeeded)
                 {
@@ -49,16 +51,18 @@ namespace WebApi_Angular_Proj.Controllers
                     usr.LName = registerDTO.LName;
                     usr.FName = registerDTO.FName;
                     usr.Image = registerDTO.Image;
-                    usr.FullName = $"{registerDTO.FName} {registerDTO.LName}";
                     Context.Users.Add(usr);
-
                     Context.SaveChanges();
-
-                    return Ok("Done");
+                    result1.Message = "sucess";
+                    result1.IsPass = true;
+                    result1.Data = usr.FName;
+                    return Ok(result1);
                 }
                 else
                 {
-                    return BadRequest(result.Errors);
+                    result1.Message = "the register failed";
+                    result1.IsPass = false;
+                    return BadRequest(result1);
                 }
             }
             else
@@ -68,47 +72,54 @@ namespace WebApi_Angular_Proj.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(LoginDTO loginDTO)
+        public async Task<ActionResult<Result>> LoginAsync(LoginDTO loginDTO)
         {
+
             if (ModelState.IsValid)
             {
-                ApplicationUser Usr= await userManager.FindByNameAsync(loginDTO.UserName);
-
-                List<Claim> myClaims = new List<Claim>();
-                
-                myClaims.Add(new Claim(ClaimTypes.NameIdentifier, Usr.Id));
-                myClaims.Add(new Claim(ClaimTypes.Name, Usr.UserName));
-                myClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-
-                var authSecritKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SecuriytKey"]));
-
-                SigningCredentials credentials =
-                    new SigningCredentials(authSecritKey, SecurityAlgorithms.HmacSha256);
-
+                ApplicationUser Usr = await userManager.FindByNameAsync(loginDTO.UserName);
                 if (Usr != null && await userManager.CheckPasswordAsync(Usr, loginDTO.Password))
                 {
-                    
-                        JwtSecurityToken jtw = new JwtSecurityToken
-                            (
-                                issuer:"https://localhost:7223",
-                                audience: "https://localhost:4200",
-                                expires:DateTime.Now.AddHours(0.5),
-                                claims: myClaims,
-                                signingCredentials: credentials
-                            );
+
+
+                    List<Claim> myClaims = new List<Claim>();
+
+                    myClaims.Add(new Claim(ClaimTypes.NameIdentifier, Usr.Id));
+                    myClaims.Add(new Claim(ClaimTypes.Name, Usr.UserName));
+                    myClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+                    var authSecritKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SecuriytKey"]));
+
+                    SigningCredentials credentials =
+                        new SigningCredentials(authSecritKey, SecurityAlgorithms.HmacSha256);
+
+
+
+                    JwtSecurityToken jtw = new JwtSecurityToken
+                        (
+                            issuer: "ValidIss",
+                            audience: "ValidAud",
+                            expires: DateTime.Now.AddHours(0.5),
+                            claims: myClaims,
+                            signingCredentials: credentials
+                        );
                     return Ok(new
                     {
                         token = new JwtSecurityTokenHandler().WriteToken(jtw),
                         expiration = jtw.ValidTo,
-                       
-                });
+                        message = "sucesss"
+                    }); ;
 
                 }
-                return BadRequest("Invalid Data");
+                Result result = new Result();
+                result.Message = "failed";
+                return BadRequest(result);
             }
 
             return BadRequest(ModelState);
         }
     }
+
+
 }

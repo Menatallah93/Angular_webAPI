@@ -6,7 +6,6 @@ namespace WebApi_Angular_Proj.Repository
     public class ProfileUpdateRepository : IProfileUpdateRepository
     {
         Context context;
-
         public ProfileUpdateRepository(Context context)
         {
             this.context = context;

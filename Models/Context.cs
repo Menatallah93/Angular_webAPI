@@ -19,6 +19,7 @@ namespace WebApi_Angular_Proj.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Requests> Requests { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
     }
 }

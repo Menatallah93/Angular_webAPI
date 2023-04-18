@@ -15,7 +15,6 @@ namespace WebApi_Angular_Proj.Controllers
     [EnableCors(origins: "http://localhost:4200/", headers: "*", methods: "*")]
     public class ProfileController : ControllerBase
     {
-
         private readonly UserManager<ApplicationUser> userManager;
 
         public Context Context { get; }
@@ -37,6 +36,7 @@ namespace WebApi_Angular_Proj.Controllers
             }
             return BadRequest();
         }
+
 
         [HttpGet("MyData/{id}")]
         public async Task<ActionResult<ProfileUpdateDTO>> GetDataAsync(string id)
@@ -72,7 +72,6 @@ namespace WebApi_Angular_Proj.Controllers
             }
             
         
-
         [HttpPut("Password/{id}")]
         public async Task<IActionResult> PasswordAsync(string id , ChangePassDto chpass)
         {
@@ -84,7 +83,6 @@ namespace WebApi_Angular_Proj.Controllers
                 if (await userManager.CheckPasswordAsync(Usr, chpass.oldPass))
                 {
                     var newPasswordHash = userManager.PasswordHasher.HashPassword(Usr, chpass.newPass);
-
 
                     Usr.PasswordHash = newPasswordHash;
 
@@ -101,6 +99,8 @@ namespace WebApi_Angular_Proj.Controllers
             }
             return BadRequest();
         }
+        
+
         [HttpPut("Data/{id}")]
         public async Task<IActionResult> DataAsync(string id, ProfileUpdateDTO newuser)
         {
@@ -134,7 +134,6 @@ namespace WebApi_Angular_Proj.Controllers
         }
 
 
-
         [HttpGet("MyPosts")]
         public IActionResult GetPosts(string id)
         {
@@ -142,15 +141,14 @@ namespace WebApi_Angular_Proj.Controllers
             return Ok(posts);
         }
 
+
         [HttpGet("RequetsSent")]
         public IActionResult RequestsSent(string id)
         {
-            
             List<Requests> toRq = Context.Requests.Where(r => r.FromId == id).ToList();
-
-            
             return Ok(toRq);
         }
+
 
         [HttpGet("MyConnects")]
         public IActionResult GetConnects(string id)

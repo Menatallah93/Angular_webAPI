@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebApi_Angular_Proj.Models
 {
@@ -27,12 +28,15 @@ namespace WebApi_Angular_Proj.Models
 
 
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        [JsonIgnore]
+        public virtual ApplicationUser? ApplicationUser { get; set; }
+        [JsonIgnore]
 
         [InverseProperty("FromUser")]
-        public virtual ICollection<Requests> FromRequests { get; set; } = new List<Requests>();
+        public virtual ICollection<Requests>? FromRequests { get; set; } = new List<Requests>();
+        [JsonIgnore]
         [InverseProperty("ToUser")]
-        public virtual ICollection<Requests> ToRequests { get; set; } = new List<Requests>();
+        public virtual ICollection<Requests>? ToRequests { get; set; } = new List<Requests>();
 
 
 
