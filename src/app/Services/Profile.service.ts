@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { IComment } from "../Shared-Interface/IComment";
 import { IProfile } from '../Shared-Interface/IProfile';
+import { IChangePass } from '../Shared-Interface/IChangePass';
+import { IPost } from '../Shared-Interface/IPost';
 
 @Injectable({
   providedIn: 'root'
@@ -21,17 +23,25 @@ export class ProfileservicesService {
 
   GetData(userid: string): Observable<IProfile> {
 
-    return this.http.get<IProfile>(`https://localhost:44335/api/profile/MyData/${userid}`)
+    return this.http.get<IProfile>(`https://localhost:7223/api/profile/MyData/${userid}`)
       .pipe(catchError((err) => {
         return throwError(() => err.message || "server error");
       }));
   }
 
-  ChangePass(id: string, newpass: string, oldpass: string): Observable<object> {
+  ChangePass(id:string,IchPss:IChangePass):Observable<IChangePass>{
+    
+    return this.http.put<IChangePass>(`https://localhost:7223/api/Profile/Password/${id}`,IchPss)
+    .pipe(catchError((err)=>{
+      return throwError(()=>err.message ||"server error");
+    }));
+  }
 
-    return this.http.put<object>(`https://localhost:44335/api/profile/password/${id}`, { newpass, oldpass })
-      .pipe(catchError((err) => {
-        return throwError(() => err.message || "server error");
-      }));
+  GetMyPosts(id:string):Observable<IPost[]>{
+    
+    return this.http.get<IPost[]>(`https://localhost:7223/api/Post/${id}`)
+    .pipe(catchError((err)=>{
+      return throwError(()=>err.message ||"server error");
+    }));
   }
 }

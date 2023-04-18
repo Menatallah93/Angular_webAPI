@@ -5,6 +5,8 @@ import { CommentservicesService } from '../Services/comment.service';
 import { IComment, ICreateComment } from '../Shared-Interface/IComment';
 import { FormBuilder, Validators } from '@angular/forms';
 import { valueOrDefault } from 'src/assets/vendor/chart.js/helpers';
+import { Ilike } from '../Shared-Interface/ILike';
+import { interval, lastValueFrom, take } from 'rxjs';
 
 @Component({
   selector: 'app-home-linkedin',
@@ -24,6 +26,7 @@ export class HomeLinkedinComponent implements OnInit {
 
 
   });
+
   CreateComment = this.fb.group({
 
     postId: [''],
@@ -31,14 +34,20 @@ export class HomeLinkedinComponent implements OnInit {
   })
 
   Post: ICreatePost = {
-    userId: "292c22c6-2574-4cbc-979e-c94a0640eca0",
+    userId: "aaa54065-545e-45a2-99cc-be364a8b0562",
     postContent: ""
   }
 
   Comment: ICreateComment = {
-    userId: "292c22c6-2574-4cbc-979e-c94a0640eca0",
+    userId: "aaa54065-545e-45a2-99cc-be364a8b0562",
     postId: 0,
     commentContent: ""
+  }
+
+  like:Ilike = {
+    userId:"aaa54065-545e-45a2-99cc-be364a8b0562",
+    typeContent:"Post",
+    postId:0
   }
 
   ngOnInit() {
@@ -61,6 +70,7 @@ export class HomeLinkedinComponent implements OnInit {
   }
 
   CreatePost() {
+    console.log(this.Post)
     this._PostService.CreatePost(this.Post).subscribe({
       next: data => console.log(data),
       error: err => console.log(err),
@@ -74,4 +84,52 @@ export class HomeLinkedinComponent implements OnInit {
       error: err => console.log(err),
     })
   }
+
+
+
+  checked!:boolean
+  AddLike(PostId:number,user:string){
+    var service = this._CommentService;
+    var tempLike = this.like;
+    tempLike.postId=PostId
+    tempLike.userId=user
+    tempLike.typeContent="Post"
+    var checks: any
+    async function name(PostId:number,user:string) {
+      let status
+    return await  service.checkLike(PostId,user).then(val=> {console.log(val),checks=val});
+    }
+    async function execute() {
+
+
+      const source$ = interval(1000)
+      .pipe(take(2));
+      const finalNumber = await lastValueFrom(source$);
+      console.log( service.status)
+      console.log(`The final number is ${finalNumber}`);
+      if(!service.status){
+
+      service.createLike(tempLike).subscribe({
+        next: data => console.log(data),
+        error: err => console.log(err),
+      })
+    }else{
+      service.deleteLike(PostId,user).subscribe({
+        next: data => console.log(data),
+        error: err => console.log(err),
+      })
+    }
+    };
+    execute();
+    this.like.postId=PostId
+    this.like.userId=user
+    this.like.typeContent="Post"
+    console.log(PostId)
+    console.log(name(PostId,user))
+    console.log(user)
+    console.log(this.like)
+    console.log(this._CommentService.status)
+    console.log(checks)
+  }
+  
 }

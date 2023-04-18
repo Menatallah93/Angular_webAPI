@@ -4,6 +4,8 @@ import { ProfileservicesService } from '../Services/Profile.service';
 import { FrindRequstService } from '../Services/frind-requst.service';
 import { IProfile } from '../Shared-Interface/IProfile';
 import { ISendRequest } from '../Shared-Interface/ISendRequest';
+import { IChangePass } from '../Shared-Interface/IChangePass';
+import { IPost } from '../Shared-Interface/IPost';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -14,6 +16,8 @@ export class ProfileComponent {
     private FrindRequest: FrindRequstService) {
 
   }
+
+  MyPostss : IPost[] = []
 
   ProfileData: IProfile = {
     userId: '',
@@ -51,21 +55,21 @@ export class ProfileComponent {
     image: ['', [Validators.required]],
     linkedinLink: ['', [Validators.required]],
     cuntry: ['', [Validators.required]],
-
-
   });
 
-  fromId: string = "292c22c6-2574-4cbc-979e-c94a0640eca0"
-  toId: string = "1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea"
 
-  oldpass: string = ''
-  newpass: string = ''
-  confirmpass: string = ''
+  fromId: string = "62090ef5-43b6-4c9c-875a-8ca54ab952f6"
+  toId: string = "5e5c1451-0dcc-4bcc-89b4-dd7939358909"
+
+  Ichange:IChangePass = {
+    oldPass: '',
+    newPass: ''
+  }
 
   UpdatePassForm = this.fb.group({
     oldpass: ['',],
     newpass: ['',],
-    confirmpass: ['',],
+    confirmpass: ['',]
 
   });
 
@@ -80,32 +84,44 @@ export class ProfileComponent {
 
   ngOnInit() {
     console.log(this.ProfileData);
-    this.ProfileService.GetData("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea").subscribe({
+    this.ProfileService.GetData("3740f54c-f6b1-4b00-b917-81c79a58b3d9").subscribe({
       next: data => this.ProfileData = data,
 
       error: err => this.Error = err,
     })
     console.log(this.ProfileData);
+
+    this.MyPosts();
   }
 
   SaveChanges() {
     console.log(this.ProfileData);
-    this.ProfileService.UpdateData("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea", this.ProfileData).subscribe({
+    this.ProfileService.UpdateData("3740f54c-f6b1-4b00-b917-81c79a58b3d9", this.ProfileData).subscribe({
       next: data => this.ProfileData = data,
 
       error: err => console.log(err),
     })
   }
 
-  PassChanges() {
-    console.log(this.newpass);
-    console.log(this.oldpass);
-    this.ProfileService.ChangePass("1f934b5a-b637-49b7-bbfa-c65ca5a2a6ea", this.newpass, this.oldpass).subscribe({
-      next: data => console.log(data),
 
+  PassChanges() {
+    console.log(this.Ichange.newPass);
+    console.log(this.Ichange.oldPass);
+    this.ProfileService.ChangePass("3740f54c-f6b1-4b00-b917-81c79a58b3d9",this.Ichange).subscribe({
+      next: data => console.log(data),
+      
       error: err => console.log(err),
-    })
-  }
+    })}
+
+    MyPosts() {
+      
+      this.ProfileService.GetMyPosts("3740f54c-f6b1-4b00-b917-81c79a58b3d9").subscribe({
+        next: data => this.MyPostss = data,
+        
+        error: err => console.log(err),
+      })
+    }
+
 
   SendConnect() {
     this.FrindRequest.SenConnect(this.fromId, this.toId).subscribe({
@@ -123,6 +139,7 @@ export class ProfileComponent {
   get lName() {
     return this.UpdatePofileForm.get('lName');
   }
+
   get fName() {
     return this.UpdatePofileForm.get('fName');
   }
@@ -138,11 +155,9 @@ export class ProfileComponent {
   get linkedinLink() {
     return this.UpdatePofileForm.get('linkedinLink');
   }
-
   get instagramLink() {
     return this.UpdatePofileForm.get('instagramLink');
   }
-
   get facebookLink() {
     return this.UpdatePofileForm.get('facebookLink');
   }

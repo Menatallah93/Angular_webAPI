@@ -1,7 +1,5 @@
 import { IUser } from '../Shared-Interface/IUser';
 export interface IProfile {
-        
-  
   userId: string,
   fullName: string,
   fName: string,
