@@ -17,9 +17,9 @@ import { SignalRsService } from '../Services/SignalR.service';
   styleUrls: ['./home-linkedin.component.scss'],
 })
 export class HomeLinkedinComponent implements OnInit {
-
-  @ViewChild('Mydiv')
-  Mydiv!: HTMLElement | null;
+  @ViewChild('postsDiv') postsDiv!:ElementRef;
+  
+  Mydiv!: HTMLDivElement | null;
 
   constructor(private renderer: Renderer2,public signalRService: SignalRsService,private fb: FormBuilder, private _PostService: PostServiceService, private _CommentService: CommentservicesService,private router:Router,) { }
   Posts: IPost[] = [];
@@ -27,7 +27,7 @@ export class HomeLinkedinComponent implements OnInit {
   Error: any;
   CurrentUser!: IUser;
   IsShowen: boolean = false;
-  p2:HTMLElement | null = document.getElementById("#postsDiv");
+  
 
   CreatePostForm = this.fb.group({
     userId: [''],
@@ -64,7 +64,7 @@ export class HomeLinkedinComponent implements OnInit {
 
     
     this.GetCurrentUsers("3740f54c-f6b1-4b00-b917-81c79a58b3d9");
-    
+    console.log(this.CurrentUser)
     this._PostService.GetPosts().subscribe({
       next: data => this.Posts = data,
       
@@ -91,48 +91,49 @@ export class HomeLinkedinComponent implements OnInit {
     
     setTimeout(() => {
 
-      this.signalRService.askServer(this.Post,"3740f54c-f6b1-4b00-b917-81c79a58b3d9")
       
+      this.signalRService.askServer(this.Post,"3740f54c-f6b1-4b00-b917-81c79a58b3d9")
     }, 2000);
     
-    var Mydiv1 = document.getElementById("#postsDiv"); 
-    console.log(Mydiv1)
-    const p: HTMLElement = this.renderer.createElement('p');
-    p.innerHTML = `<div class="card-body">
+  //   var Mydiv1 = document.getElementById("postsDiv"); 
+  //   console.log(Mydiv1)
+  //   const p: HTMLElement = this.renderer.createElement('p');
+  //   p.innerHTML += `<div class="card-body">
 
-    <div class="d-flex m-3">
+  //   <div class="d-flex m-3">
    
-     <div class="m-1">
+  //    <div class="m-1">
    
-       <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" width="70px"
-         height="70px">
-     </div>
-    <div class="m-3">
-      <h4 style="font-weight: bold;">
-        this.CurrentUser.fName
-      </h4>
-      <p>
-      this.CurrentUser.image
-      </p>
-    </div>
+  //      <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" width="70px"
+  //        height="70px">
+  //    </div>
+  //   <div class="m-3">
+  //     <h4 style="font-weight: bold;">
+  //       ${this.CurrentUser.fName}
+  //     </h4>
+  //     <p>
+  //     ${this.CurrentUser.image}
+  //     </p>
+  //   </div>
    
-   </div>
+  //  </div>
    
-   <div style="width: 100%; height: 70%;">
-     <p>this.Post.postContent</p>
-     <img src="assets/img/profile-img.jpg" alt="Profile" width="100%" height="50%">
-   </div>
-   <hr class="mt-3">
-   <div class="btn-group" role="group" aria-label="Basic outlined example">
-     <a type="button" class="btn btn-outline-primary btn-md"(click)="AddLike(Post.id,Post.userId)" >
-     <i class="fa-regular fa-thumbs-up"></i>
-     0 Like</a>
-   <a type="button" class="btn btn-outline-primary btn-md" (click)="showComment(Post.id)"><i
-        class="fa-solid fa-comment"></i> Comment</a>
-    <a type="button" class="btn btn-outline-primary btn-md"><i class="fa-sharp fa-share"></i> Share</a>
-   </div>`
+  //  <div style="width: 100%; height: 70%;">
+  //    <p>${this.Post.postContent}</p>
+  //    <img src="assets/img/profile-img.jpg" alt="Profile" width="100%" height="50%">
+  //  </div>
+  //  <hr class="mt-3">
+  //  <div class="btn-group" role="group" aria-label="Basic outlined example">
+  //    <a type="button" class="btn btn-outline-primary btn-md"(click)="AddLike(Post.id,Post.userId)" >
+  //    <i class="fa-regular fa-thumbs-up"></i>
+  //    0 Like</a>
+  //  <a type="button" class="btn btn-outline-primary btn-md" (click)="showComment(Post.id)"><i
+  //       class="fa-solid fa-comment"></i> Comment</a>
+  //   <a type="button" class="btn btn-outline-primary btn-md"><i class="fa-sharp fa-share"></i> Share</a>
+  //  </div>`
 
-    this.Mydiv?.appendChild(p)
+    // console.log(p)
+    // Mydiv1?.appendChild(p)
     
     
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { IComment } from "../Shared-Interface/IComment";
@@ -15,7 +15,13 @@ export class SignalRsService {
     hubconnection!: signalR.HubConnection;
     Mypost!: ICreatePost;
     Myuserid! : string;
-  constructor(private http: HttpClient) { }
+    public renderer!: Renderer2;
+    
+  constructor(private http: HttpClient,rendererFactory: RendererFactory2) {
+
+      this.renderer = rendererFactory.createRenderer(null, null);
+   }
+
 
   StartPostConnection(){
     this.hubconnection = new signalR.HubConnectionBuilder().withUrl('https://localhost:7223/Posthub',
@@ -33,18 +39,63 @@ export class SignalRsService {
   askServer(post:ICreatePost,id:string){
     this.Mypost = post;
     this.Myuserid = id;
+    
     this.hubconnection.invoke('NewPost',post,id)
-    this.hubconnection.on("PostAdded",function(Myuserid,Mpost){
-        console.log(Myuserid);
-        console.log(Mpost);
+    const self = this;
+    this.hubconnection.on('PostAdded',function (Myuserid,post) {
+        console.log(Myuserid)
+        var Mydiv1 = document.getElementById("postsDiv"); 
+        console.log(Mydiv1)
+        
+        const p: HTMLElement = self.renderer.createElement('p');
+        p.innerHTML += `<div class="card-body">
+        
+        <div class="d-flex m-3">
+        
+        <div class="m-1">
+        
+        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" width="70px"
+        height="70px">
+        </div>
+        <div class="m-3">
+        <h4 style="font-weight: bold;">
+        ${Myuserid}
+      </h4>
+      <p>
+      ${Myuserid}
+      </p>
+      </div>
+      
+      </div>
+      
+      <div style="width: 100%; height: 70%;">
+      <p>${post.postContent}</p>
+      <img src="assets/img/profile-img.jpg" alt="Profile" width="100%" height="50%">
+      </div>
+      <hr class="mt-3">
+      <div class="btn-group" role="group" aria-label="Basic outlined example">
+      <a type="button" class="btn btn-outline-primary btn-md"(click)="AddLike(Post.id,Post.userId)" >
+      <i class="fa-regular fa-thumbs-up"></i>
+      0 Like</a>
+      <a type="button" class="btn btn-outline-primary btn-md" (click)="showComment(Post.id)"><i
+      class="fa-solid fa-comment"></i> Comment</a>
+      <a type="button" class="btn btn-outline-primary btn-md"><i class="fa-sharp fa-share"></i> Share</a>
+      </div>`
+      
+      console.log(p)
+      Mydiv1?.appendChild(p)
+      
+    console.log(Mydiv1)
     })
-  }
+}
+
+askServerListener(){
+    
+}
 
 
 
-  
-
-  PostAdded(user:string){
+PostAdded(user:string){
     
       console.log(user);
       

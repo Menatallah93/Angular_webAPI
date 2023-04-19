@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Renderer2 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 
@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { SignalRsService } from './Services/SignalR.service';
 
 
 
@@ -24,13 +25,14 @@ import { CommonModule } from '@angular/common';
     HeaderComponent,
     ProfileComponent,
     
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    CommonModule 
+    CommonModule,
     
   ],
   providers: [],
