@@ -11,6 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './profile/profile.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -21,13 +22,16 @@ import { HttpClientModule } from '@angular/common/http';
     LoginComponent,
     RegestrationComponent,
     HeaderComponent,
-    ProfileComponent
+    ProfileComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    CommonModule 
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

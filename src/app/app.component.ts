@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SignalRsService } from './Services/SignalR.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Angylar-Project';
-  
+  constructor(public signalRService: SignalRsService){
+
+  }
+
+  ngOnInit(){
+    
+  }
 }
