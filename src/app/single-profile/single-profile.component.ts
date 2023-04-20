@@ -1,25 +1,29 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ProfileservicesService } from '../Services/Profile.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FrindRequstService } from '../Services/frind-requst.service';
-import { IProfile } from '../Shared-Interface/IProfile';
-import { ISendRequest } from '../Shared-Interface/ISendRequest';
-import { IChangePass } from '../Shared-Interface/IChangePass';
-import { IPost } from '../Shared-Interface/IPost';
-import { PostServiceService } from '../Services/post-service.service';
 import { AuthorizeService } from '../Services/authorize.service';
+import { ProfileservicesService } from '../Services/Profile.service';
+import { IPost } from '../Shared-Interface/IPost';
+import { IProfile } from '../Shared-Interface/IProfile';
+
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-single-profile',
+  templateUrl: './single-profile.component.html',
+  styleUrls: ['./single-profile.component.scss']
 })
-export class ProfileComponent {
+export class SingleProfileComponent {
   constructor(private fb: FormBuilder, private ProfileService: ProfileservicesService,
-    private FrindRequest: FrindRequstService,private Auth:AuthorizeService) {
+    private FrindRequest: FrindRequstService,private Auth:AuthorizeService,
+    private activerout: ActivatedRoute) {
+
   }
 
-  MyPostss : IPost[] = []
+  userId : any ;
+  user : any ;
+  Error: any;
 
+  MyPostss : IPost[] = []
   ProfileData: IProfile = {
     userId: '',
     fullName: '',
@@ -38,7 +42,7 @@ export class ProfileComponent {
     image: '',
 
   }
-  Error: any;
+  
 
   UpdatePofileForm = this.fb.group({
     fullName: ['', [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.minLength(3)]],
@@ -59,29 +63,14 @@ export class ProfileComponent {
   });
 
 
-  fromId: string = this.Auth.gettokenID();
-  toId: string = "a80c9636-60da-4235-99b1-a4d30ee28a77";
-
-  Ichange:IChangePass = {
-    oldPass: '',
-    newPass: ''
-  }
-
-  UpdatePassForm = this.fb.group({
-    oldpass: ['',],
-    newpass: ['',],
-    confirmpass: ['',]
-
-  });
-
   ConnectForm = this.fb.group({
     fromId: [''],
     toId: ['']
 
   });
 
-
-
+  fromId: string = '';
+  toId: string ='';
 
   ngOnInit() {
     console.log(this.ProfileData);
@@ -93,26 +82,15 @@ export class ProfileComponent {
     console.log(this.ProfileData);
 
     this.MyPosts();
-  }
 
-  SaveChanges() {
-    console.log(this.ProfileData);
-    this.ProfileService.UpdateData(this.Auth.gettokenID(), this.ProfileData).subscribe({
-      next: data => this.ProfileData = data,
+this.activerout.paramMap.subscribe((parm: ParamMap) => {
+    this.userId = parm.get("id");
+    this.user = this.ProfileService.GetData(this.userId);
+})
 
-      error: err => console.log(err),
-    })
-  }
-
-
-  PassChanges() {
-    console.log(this.Ichange.newPass);
-    console.log(this.Ichange.oldPass);
-    this.ProfileService.ChangePass(this.Auth.gettokenID(),this.Ichange).subscribe({
-      next: data => console.log(data),
-      
-      error: err => console.log(err),
-    })}
+  this.fromId = this.Auth.gettokenID();
+   this.toId= this.userId;
+}
 
     MyPosts() {
       
@@ -123,12 +101,13 @@ export class ProfileComponent {
       })
     }
 
-
+  isClick : Boolean = true;
   SendConnect() {
     this.FrindRequest.SenConnect(this.fromId, this.toId).subscribe({
       next: data => console.log(data),
       error: err => console.log(err),
     })
+this.isClick = false;
   }
 
 
@@ -182,5 +161,4 @@ export class ProfileComponent {
   get job() {
     return this.UpdatePofileForm.get('job');
   }
-
 }

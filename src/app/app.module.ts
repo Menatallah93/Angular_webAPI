@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SignalRsService } from './Services/SignalR.service';
+import { SingleProfileComponent } from './single-profile/single-profile.component';
 
 
 
@@ -24,6 +25,7 @@ import { SignalRsService } from './Services/SignalR.service';
     RegestrationComponent,
     HeaderComponent,
     ProfileComponent,
+    SingleProfileComponent,
     
     
   ],

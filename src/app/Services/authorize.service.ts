@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  currentuser=new BehaviorSubject(null);
+  currentuser:any='';
 
   constructor(private myhttp:HttpClient,private _Router:Router) { }
   
@@ -28,10 +28,19 @@ export class AuthorizeService {
   login(pop:any):Observable<any>{
     return this.myhttp.post("https://localhost:7223/api/Account/login",pop);
   }
+  id:any=`http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier`;
 getToken()
 {
   let token:any=localStorage.getItem("userInfo");
   this.currentuser= jwtDecode(token);
-  console.log(this.currentuser);
+}
+gettokenID():string
+{
+  let token:any=localStorage.getItem("userInfo");
+  this.currentuser= jwtDecode(token);
+  var nameIdentifier = this.currentuser['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+  console.log(nameIdentifier);
+return  nameIdentifier;
+
 }
 }

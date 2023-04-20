@@ -10,24 +10,35 @@ import { interval, lastValueFrom, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { IUser } from '../Shared-Interface/IUser';
 import { SignalRsService } from '../Services/SignalR.service';
+import { AuthorizeService } from '../Services/authorize.service';
+import * as signalR from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
+import { LikeService } from '../Services/LikeService';
 
 @Component({
   selector: 'app-home-linkedin',
   templateUrl: './home-linkedin.component.html',
   styleUrls: ['./home-linkedin.component.scss'],
 })
+
 export class HomeLinkedinComponent implements OnInit {
   @ViewChild('postsDiv') postsDiv!:ElementRef;
   
   Mydiv!: HTMLDivElement | null;
 
-  constructor(private renderer: Renderer2,public signalRService: SignalRsService,private fb: FormBuilder, private _PostService: PostServiceService, private _CommentService: CommentservicesService,private router:Router,) { }
+  constructor(private renderer: Renderer2,private LikeService:LikeService ,private Auth:AuthorizeService 
+    ,public signalRService: SignalRsService,private fb: FormBuilder,
+     private _PostService: PostServiceService, 
+     private _CommentService: CommentservicesService,
+     private router:Router,) { }
+     
   Posts: IPost[] = [];
   Comments: IComment[] = [];
   Error: any;
   CurrentUser!: IUser;
   IsShowen: boolean = false;
-  
+  private hubConnectionBuilder!: HubConnection;
+  PostID:Number=0;
 
   CreatePostForm = this.fb.group({
     userId: [''],
@@ -43,34 +54,30 @@ export class HomeLinkedinComponent implements OnInit {
   })
 
   Post: ICreatePost = {
-    userId: "3740f54c-f6b1-4b00-b917-81c79a58b3d9",
+    userId: this.Auth.gettokenID(),
     postContent: ""
   }
 
   Comment: ICreateComment = {
-    userId: "3740f54c-f6b1-4b00-b917-81c79a58b3d9",
+    userId: this.Auth.gettokenID(),
     postId: 0,
     commentContent: ""
   }
 
   like:Ilike = {
-    userId:"3740f54c-f6b1-4b00-b917-81c79a58b3d9",
+    userId:this.Auth.gettokenID(),
     typeContent:"Post",
     postId:0
   }
 
-  ngOnInit() {
-
-
-    
-    this.GetCurrentUsers("3740f54c-f6b1-4b00-b917-81c79a58b3d9");
+  async ngOnInit() {
+    this.GetCurrentUsers(this.Auth.gettokenID());
     console.log(this.CurrentUser)
     this._PostService.GetPosts().subscribe({
       next: data => this.Posts = data,
       
       error: err => this.Error = err,
     })
-    
     this._PostService.GetPosts().subscribe({
       next: data => this.Posts = data,
 
@@ -78,6 +85,17 @@ export class HomeLinkedinComponent implements OnInit {
     })
     console.log(this.Posts);
     
+    this.hubConnectionBuilder = new signalR.HubConnectionBuilder().withUrl('https://localhost:7223/Commenthub',
+    {
+      skipNegotiation : true ,
+      transport:signalR.HttpTransportType.WebSockets
+    }).configureLogging(signalR.LogLevel.Debug).build();
+
+    setTimeout(() => {
+      this.hubConnectionBuilder.start().then(() => {
+        console.log("connection started");
+      }).catch(err => console.log(err));
+    }, 2000);
     
     
   }
@@ -90,9 +108,7 @@ export class HomeLinkedinComponent implements OnInit {
     await this.signalRService.StartPostConnection();
     
     setTimeout(async () => {
-
-      
-      await this.signalRService.askServer(this.Post,this.CurrentUser,"3740f54c-f6b1-4b00-b917-81c79a58b3d9")
+      await this.signalRService.askServer(this.Post,this.CurrentUser,this.Auth.gettokenID())
     }, 2000);
     
   //   var Mydiv1 = document.getElementById("postsDiv"); 
@@ -138,9 +154,6 @@ export class HomeLinkedinComponent implements OnInit {
     
   }
 
-
-
-
   GetCurrentUsers(id:string){
     this._PostService.GetCurrentUser(id).subscribe({
       next: data => this.CurrentUser = data,
@@ -170,60 +183,102 @@ export class HomeLinkedinComponent implements OnInit {
     
   }
 
-  CreateCommentFunc(PostId: number) {
+  async CreateCommentFunc(PostId: number) {
     this.Comment.postId = PostId
     this._CommentService.CreateComment(this.Comment).subscribe({
       next: data => console.log(data),
       error: err => console.log(err),
     })
+
+    this.PostID=PostId;
+    this.hubConnectionBuilder.invoke('NewCommentAdded',this.Comment);
+    await this.hubConnectionBuilder.on('NewCommentNotify',function(Cot) {
+          console.log("MArina");
+          const element: HTMLElement = document.getElementById("CreateCommentSignalR") as HTMLElement;
+          element.innerHTML +=
+           
+                    `<div class="m-3">
+
+                      <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" width="70px"
+                        height="70px">
+                    </div>
+
+                    <div class="m-3 lh-2">
+                      <span style="font-size: 18px; font-weight: bold;">Marwa</span>
+                      <br>
+                      .Net Developer 
+                      <br>
+                      <br>
+                      <p>${Cot.commentContent}</p>
+
+                    </div>`
+
+          
+    });
     
   }
 
 
-
-  checked!:boolean
-  AddLike(PostId:number,user:string){
-    var service = this._CommentService;
-    var tempLike = this.like;
-    tempLike.postId=PostId
-    tempLike.userId=user
-    tempLike.typeContent="Post"
-    var checks: any
-    async function name(PostId:number,user:string) {
-      let status
-    return await  service.checkLike(PostId,user).then(val=> {console.log(val),checks=val});
-    }
-    async function execute() {
-
-
-      const source$ = interval(1000)
-      .pipe(take(2));
-      const finalNumber = await lastValueFrom(source$);
-      console.log( service.status)
-      console.log(`The final number is ${finalNumber}`);
-      if(!service.status){
-
-      service.createLike(tempLike).subscribe({
-        next: data => console.log(data),
-        error: err => console.log(err),
-      })
-    }else{
-      service.deleteLike(PostId,user).subscribe({
-        next: data => console.log(data),
-        error: err => console.log(err),
-      })
-    }
-    };
-    execute();
-    this.like.postId=PostId
-    this.like.userId=user
-    this.like.typeContent="Post"
-    console.log(PostId)
-    console.log(name(PostId,user))
-    console.log(user)
-    console.log(this.like)
-    console.log(this._CommentService.status)
-    console.log(checks)
+  showProfile(userId: string) {
+    this.router.navigate(["/profile", userId]);
   }
+
+//////////////////// Start Like Functions 
+checked!:boolean
+async AddLike(PostId:number,user:string){
+   var service = this.LikeService;
+   var tempLike = this.like;
+   var signal = this.signalRService
+   tempLike.postId=PostId
+   tempLike.userId=user
+   tempLike.typeContent="Post"
+   var checks: any
+async function   addNotify(){
+  await signal.StartLikeConnection();
+     setTimeout(async () => {
+
+       await signal.likeNotify(PostId)
+     },1000)
+   }
+   // addNotify()
+   async function name(PostId:number,user:string) {
+     let status
+   return await  service.checkLike(PostId,user).then(val=> {console.log(val),checks=val});
+   }
+   async function execute() {
+
+
+     const source$ = interval(1000)
+     .pipe(take(2));
+     const finalNumber = await lastValueFrom(source$);
+     console.log( service.status)
+     console.log(`The final number is ${finalNumber}`);
+     if(!service.status){
+
+     service.createLike(tempLike).subscribe({
+       next: data => console.log(data),
+       error: err => console.log(err),
+     })
+     // addNotify()
+   }else{
+     service.deleteLike(PostId,user).subscribe({
+       next: data => console.log(data),
+       error: err => console.log(err),
+     })
+     // addNotify()
+   }
+ };
+ execute();
+ addNotify()
+   this.like.postId=PostId
+   this.like.userId=user
+   this.like.typeContent="Post"
+   console.log(PostId)
+   console.log(name(PostId,user))
+   console.log(user)
+   console.log(this.like)
+   console.log(this.LikeService.status)
+   console.log(checks)
+ }
   
 }

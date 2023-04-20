@@ -100,4 +100,46 @@ PostAdded(user:string){
       console.log(user);
       
   }
+
+
+
+
+// Start Like Services
+  StartLikeConnection(){
+    this.hubconnection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7223/LikeNotifyHub",
+    {
+        skipNegotiation : true ,
+         transport:signalR.HttpTransportType.WebSockets
+    }).configureLogging(signalR.LogLevel.Debug).build();
+
+    this.hubconnection.start().then(()=>{
+        console.log("Hello Connection")
+    }).catch(err => console.log(err))
+  }
+  user:any
+  post:any
+// HomeLinkedinComponent
+async likeNotify(id:number){
+//  self.renderer
+    // this.Mypost = post;
+    // this.Myuserid = id;
+var x ;
+var y ;
+ this.hubconnection.invoke("NewLike",id)
+await this.hubconnection.on('LikeAdded',async function(likeNum){
+  console.log(likeNum);
+  y = likeNum
+  console.log(y)
+  var Mylike = document.getElementById("likepost"+id);
+  var text = document.createTextNode(`${likeNum}`);
+  var text1 = document.createElement('span');
+  text1.innerHTML+=`${likeNum}`
+  console.log(Mylike);
+  Mylike!.innerHTML=`<i id="Likeicon" class="fa-regular fa-thumbs-up"></i> ${likeNum}  Like`
+  console.log(Mylike);
+}
+)
+console.log(x)
+console.log(y)
+}
 }

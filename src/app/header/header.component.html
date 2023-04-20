@@ -43,8 +43,8 @@
             </li>
 
             <!-- Friends Request -->
-            <li class="notification-item">
-              <div class="d-flex m-3 ">
+            <li class="notification-item" *ngFor="let user of users">
+              <div class="d-flex m-3 " >
 
                 <div class="m-2">
 
@@ -54,17 +54,18 @@
 
                 <div class="m-2">
                     <div class="lh-2">
-                    <span style="font-size: 15px; font-weight: bold;">Omar</span>
+                    <span style="font-size: 15px; font-weight: bold;">{{user.fName}}</span>
                     <br>
-                    .Net Developer
+                    {{user.job}}
                   </div>
                   
-                  <div class="d-flex mt-2">
-                    <button type="submit" class="btn btn-outline-primary" style="margin-right: 5px;">Accept</button>  
-                    <button type="submit" class="btn btn-outline-danger">Decline</button>
+                  <div class="d-flex mt-2" >
+                    <button class="btn btn-outline-primary" (click)="AcceptFriends(user.id)" style="margin-right: 5px;">Accept</button>  
+                    <button (click)="RejectFriends(user.id)" class="btn btn-outline-danger">Decline</button>
                   </div>
                 </div>
               </div>
+              
               <br>
             </li>
 
@@ -72,44 +73,12 @@
               <hr class="dropdown-divider">
             </li>
 
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
+            
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+           
 
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+           
+           
             
             <li class="dropdown-footer">
               <a href="#">Show all notifications</a>
