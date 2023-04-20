@@ -14,7 +14,7 @@ export class SignalRsService {
 
     hubconnection!: signalR.HubConnection;
     Mypost!: ICreatePost;
-    Myuserid! : string;
+    Myuserid! : IUser;
     public renderer!: Renderer2;
     
   constructor(private http: HttpClient,rendererFactory: RendererFactory2) {
@@ -36,13 +36,13 @@ export class SignalRsService {
   }
 
 
-  askServer(post:ICreatePost,id:string){
+  async askServer(post:ICreatePost,user:IUser,id:string){
     this.Mypost = post;
-    this.Myuserid = id;
+    this.Myuserid = user;
     
     this.hubconnection.invoke('NewPost',post,id)
     const self = this;
-    this.hubconnection.on('PostAdded',function (Myuserid,post) {
+    await this.hubconnection.on('PostAdded',function (Myuserid,post) {
         console.log(Myuserid)
         var Mydiv1 = document.getElementById("postsDiv"); 
         console.log(Mydiv1)
@@ -59,10 +59,10 @@ export class SignalRsService {
         </div>
         <div class="m-3">
         <h4 style="font-weight: bold;">
-        ${Myuserid}
+        ${Myuserid.fName} ${Myuserid.lName}
       </h4>
       <p>
-      ${Myuserid}
+      ${Myuserid.about}
       </p>
       </div>
       

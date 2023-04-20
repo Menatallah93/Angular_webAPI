@@ -5,7 +5,7 @@ export interface IUser {
     fullName: string,
     about: string,
     company: string,
-    jop:string,
+    job:string,
     linkedinLink:string,
     instagramLink:string,
     facebookLink:string,

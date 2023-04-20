@@ -85,14 +85,14 @@ export class HomeLinkedinComponent implements OnInit {
   
 
 
-  addElement() {
+  async addElement() {
     
-    this.signalRService.StartPostConnection();
+    await this.signalRService.StartPostConnection();
     
-    setTimeout(() => {
+    setTimeout(async () => {
 
       
-      this.signalRService.askServer(this.Post,"3740f54c-f6b1-4b00-b917-81c79a58b3d9")
+      await this.signalRService.askServer(this.Post,this.CurrentUser,"3740f54c-f6b1-4b00-b917-81c79a58b3d9")
     }, 2000);
     
   //   var Mydiv1 = document.getElementById("postsDiv"); 
