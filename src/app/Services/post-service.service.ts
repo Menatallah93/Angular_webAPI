@@ -21,6 +21,7 @@ export class PostServiceService implements OnInit {
     }));
   }
   CreatePost(Post :ICreatePost){
+    console.log(Post.image)
     return this.Http.post<ICreatePost>('https://localhost:7223/api/Post',Post)
     .pipe(catchError((err) => {
       return throwError(() => err.message || "server error");

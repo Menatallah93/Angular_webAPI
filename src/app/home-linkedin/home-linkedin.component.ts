@@ -14,6 +14,7 @@ import { AuthorizeService } from '../Services/authorize.service';
 import * as signalR from '@aspnet/signalr';
 import { HubConnection } from '@aspnet/signalr';
 import { LikeService } from '../Services/LikeService';
+import { HttpClient } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-home-linkedin',
@@ -30,7 +31,7 @@ export class HomeLinkedinComponent implements OnInit {
     ,public signalRService: SignalRsService,private fb: FormBuilder,
      private _PostService: PostServiceService, 
      private _CommentService: CommentservicesService,
-     private router:Router,) { }
+     private router:Router,http : HttpClient) { }
      
   Posts: IPost[] = [];
   Comments: IComment[] = [];
@@ -39,11 +40,12 @@ export class HomeLinkedinComponent implements OnInit {
   IsShowen: boolean = false;
   private hubConnectionBuilder!: HubConnection;
   PostID:Number=0;
+  selectedFile! :File;
 
   CreatePostForm = this.fb.group({
     userId: [''],
     postContent: ['', Validators.required],
-
+    image : [''],
 
   });
 
@@ -55,7 +57,8 @@ export class HomeLinkedinComponent implements OnInit {
 
   Post: ICreatePost = {
     userId: this.Auth.gettokenID(),
-    postContent: ""
+    postContent: "",
+    image : ""
   }
 
   Comment: ICreateComment = {
@@ -162,6 +165,14 @@ export class HomeLinkedinComponent implements OnInit {
     })
   }
 
+  PostImage(event:any){
+    this.selectedFile = <File>event.target.files[0]
+  }
+
+  onUpload() {
+    
+  }
+
   showComment(PostId: number): void {
     this._CommentService.GetComment(PostId).subscribe({
       next: data => this.Comments = data,
@@ -179,6 +190,8 @@ export class HomeLinkedinComponent implements OnInit {
       next: data => console.log(data),
       error: err => console.log(err),
     })
+    const formData = new FormData();
+    formData.append('image', this.selectedFile, this.selectedFile.name);
     
     
   }

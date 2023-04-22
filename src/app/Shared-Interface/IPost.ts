@@ -12,4 +12,5 @@ export interface IPost {
 export interface ICreatePost{
     userId:string
     postContent:string
+    image : string
 }
